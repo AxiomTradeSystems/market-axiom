@@ -1,0 +1,50 @@
+Copyright (c) 2026 Axiom Trade Systems. All rights reserved.
+
+MARKET AXIOM — LICENCE
+
+This repository contains documentation and, in future, an optional self-hosted webhook receiver
+("the Software") intended for use with the Market Axiom indicator distributed through TradingView.
+
+1. RESERVATION OF RIGHTS
+   All rights in the Software and in this documentation are reserved. No rights are granted except
+   those stated below.
+
+2. GRANT
+   If you hold a current, valid licence to the Market Axiom indicator on TradingView, you are
+   granted a personal, non-exclusive, non-transferable, revocable permission to:
+   (a) download and read this repository;
+   (b) deploy and run the Software on infrastructure you control, for your own trading account or
+       accounts; and
+   (c) modify the Software for that purpose.
+
+3. RESTRICTIONS
+   You may not:
+   (a) redistribute, publish, sell, sublicense or host the Software for anyone else;
+   (b) operate the Software as a service for third parties, whether or not for payment;
+   (c) use the Software or any part of it in a competing or derivative product; or
+   (d) remove or alter this notice.
+
+4. TERMINATION
+   This permission ends automatically if your TradingView licence to the Market Axiom indicator
+   lapses or is revoked, or if you breach any term above.
+
+5. NO WARRANTY
+   THE SOFTWARE AND DOCUMENTATION ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+   PURPOSE AND NONINFRINGEMENT.
+
+6. LIMITATION OF LIABILITY
+   TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL AXIOM TRADE SYSTEMS BE LIABLE FOR ANY
+   CLAIM, DAMAGES, TRADING LOSSES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE, THE DOCUMENTATION, OR THE USE
+   OF OR OTHER DEALINGS IN THEM.
+
+7. NOT FINANCIAL ADVICE
+   Nothing in this repository is financial advice. Trading involves substantial risk of loss.
+   Axiom Trade Systems is not a registered investment advisor. You are solely responsible for your
+   own trading decisions and for the operation of any software you deploy.
+
+8. YOUR DEPLOYMENT IS YOURS
+   Where you deploy the Software on your own infrastructure, you are the operator. You are
+   responsible for its configuration, its security, the credentials it holds, and every order it
+   places on your behalf.

@@ -10,9 +10,21 @@ If you're using **TradersPost** — the default and recommended route — everyt
 indicator's own settings plus the TradersPost setup below. There's nothing to install, nothing to
 deploy, and no code to write.
 
-The self-hosted advanced route, setup videos and the full settings reference are in progress and
-will appear here as they're finished. **Bookmark this page rather than saving a copy** — it's the
-one address that stays current.
+| If you want to… | Read |
+|---|---|
+| Set up an alert, manual or automated | **[CREATING-ALERTS.md](CREATING-ALERTS.md)** |
+| Connect real money | **[GOING-LIVE.md](GOING-LIVE.md)** |
+| Find settings that suit your ticker | **[TUNING.md](TUNING.md)** |
+| Fix something that looks wrong | **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** |
+| Understand how it works | **[FAQ.md](FAQ.md)** |
+| Know what a setting is really called | **[GLOSSARY.md](GLOSSARY.md)** |
+
+Every setting is documented inside the indicator — hover the ⓘ beside it. Those tooltips ship with
+the build, so they can never fall out of date.
+
+The self-hosted advanced route and setup videos are in progress and will appear here as they're
+finished. **Bookmark this page rather than saving a copy** — it's the one address that stays
+current.
 
 ---
 
@@ -111,12 +123,26 @@ Worth knowing before you're surprised by it:
 
 ---
 
+## Everything else
+
+- **[CREATING-ALERTS.md](CREATING-ALERTS.md)** — the full alert walkthrough, why order of operations
+  matters, and the eight mistakes people make in the order they make them.
+- **[GOING-LIVE.md](GOING-LIVE.md)** — the pre-flight checklist for connecting real money, including
+  the losing-streak arithmetic you should do before you fund anything.
+- **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** — symptom-first. The bot isn't trading, my numbers
+  changed, my broker and the chart disagree, and the rest.
+- **[TUNING.md](TUNING.md)** — how to use the dashboard to find out whether a ticker and style suit
+  each other, and how to avoid fooling yourself while you do it.
+- **[FAQ.md](FAQ.md)** — how it works, what to expect, risk and losing streaks, LITE vs full.
+- **[GLOSSARY.md](GLOSSARY.md)** — plain-English names mapped to the standard industry terms, and an
+  honest note about which parts are proprietary.
+- **Settings** — documented in the indicator itself, on every ⓘ.
+
 ## Coming soon
 
 - **Self-hosted route** — run your own webhook receiver instead of using TradersPost. Advanced;
   requires deploying a Cloudflare Worker yourself.
 - **Setup walkthrough video**
-- **Full settings reference**
 
 ---
 
