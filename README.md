@@ -75,17 +75,17 @@ and fight over its protective stop.
 
 ## Creating the TradingView alert
 
-**Turn on `Enable Auto-Trading Alerts` in the indicator settings BEFORE you create the alert.** An
-alert created while that switch is off sends plain text forever and can never place a trade, no
-matter what you change on the chart afterwards.
+**Set `Broker Platform` in the indicator settings BEFORE you create the alert.** An alert created
+while it is on `Alerts Only` sends plain text forever and can never place a trade, no matter what you
+change on the chart afterwards.
 
 Then:
 
 - **Condition:** this indicator, **`Any alert() function call`**
 - **Frequency:** Once Per Bar Close
 - **Notifications:** paste your webhook URL into the Webhook URL box
-- **Do not edit the alert's message box.** The payload comes from the script. Changing it destroys
-  the order format and your broker receives nothing usable.
+- **Leave the Message row alone.** It only sets the alert's *name*, which never leaves TradingView.
+  The payload comes from the script.
 
 Before you click Create, check the status line at the bottom of the indicator. It should show the
 build number and the word **`armed`**. If `armed` is missing, the alert would be created unable to
