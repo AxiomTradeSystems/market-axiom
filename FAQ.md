@@ -1,209 +1,187 @@
 # Frequently Asked Questions
 
-Conceptual questions about how Market Axiom works. If something looks *wrong*, start with
-**TROUBLESHOOTING.md** instead — this page explains behaviour, that one diagnoses symptoms.
-
-Settings are documented inside the indicator itself. Hover the ⓘ beside any setting for its full
-explanation — those tooltips ship with the build, so they can never fall out of date the way a web
-page can.
+How Market Axiom works and what to expect. If something looks wrong, start with
+[TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
 ---
 
 ## The basics
 
 **What is Market Axiom?**
-A TradingView indicator that generates buy and sell signals with a stop loss and position sizing,
-and can send those signals to your broker as real orders. It reads each ticker's behaviour and routes
-it to one of three strategy engines — Momentum, Trend Following, or Mean Reversion — rather than
-applying one fixed approach to everything.
+A TradingView indicator that finds trades, sets a stop loss, sizes each position and can send the
+orders to your broker. It reads each ticker's behavior and routes it to one of three strategy
+engines (Momentum, Trend Following or Mean Reversion) instead of using one approach for everything.
 
 **Does it repaint?**
-No. Entries are always evaluated on the close of a completed candle, regardless of any other setting.
-That is what stops signals from appearing and disappearing mid-candle.
+No. Entries are always decided at the close of a finished candle. A signal on the chart does not
+appear and then vanish.
 
-Exits can optionally react faster: the `Quick Exits` Signal Speed checks stops and targets as prices
-arrive rather than waiting for the candle to finish. That affects when a trade *closes*, never
-whether an entry existed.
+The **Quick Exits** Signal Speed lets exits react during a candle, on the TradersPost and
+self-hosted routes. That changes when a trade closes, never whether an entry happened.
 
-**Do I need to leave TradingView open for it to trade?**
-No. Alerts run on TradingView's servers, not in your browser. Once an alert is created you can close
-the tab, shut the laptop, and it keeps firing.
+**Do I need to keep TradingView open?**
+No. Alerts run on TradingView's servers. Once an alert exists, you can close the browser and turn
+off the computer.
 
 **What timeframe should I use?**
-15 minutes. Every trading style produces its most consistent results there. Other timeframes work,
-but they are outside the tested configuration and the dashboard will say so.
+15 minutes. The default settings were validated on that timeframe, with the Swing style.
 
-**Does it work on crypto and forex?**
-Yes, and on stocks and ETFs. The engine adapts to the instrument's behaviour rather than assuming a
-market type. Note that `Trade Extended Hours` does nothing on markets that already trade 24/7.
-
----
-
-## Getting it trading
-
-**Do I need to build anything to automate it?**
-No. Choose **TradersPost** as your Broker Platform — it connects TradingView alerts to brokers like
-Alpaca and Tradier with no code at all. You create an account there, connect your broker inside it,
-and paste the webhook address it gives you into your TradingView alert.
-
-**What is the Standard (Custom JSON) route then?**
-It is for people running their own webhook receiver — typically a small server they deployed
-themselves. It sends the bot's native order format, including trailing-stop updates that the
-TradersPost route does not push. **If you don't already know you need it, you don't.**
-
-**Which broker should I use?**
-Whichever your chosen platform supports and you already trust. Market Axiom never touches your
-broker directly — it sends signals to the platform you configured, and that platform places the
-orders.
-
-**Why does the bot ship unable to trade?**
-Broker Platform defaults to `Alerts Only`, which sends nothing to any broker. That is deliberate.
-Handing order placement to software is a decision you should make on purpose, after watching it on a
-chart and testing on a paper account — not something that happens because you added an indicator.
-
-**How long should I test on paper before going live?**
-At least two weeks. Both TradersPost and most brokers offer a free paper account. Two weeks is the
-minimum needed to see the bot behave across a range of market conditions rather than one mood.
-
-**Can I run several tickers at once?**
-Yes — one chart and one alert per ticker. **Split your Account Balance between them.** Every chart
-sizes as though it is the only one touching your account, so four charts each told they have $20,000
-will each trade full size and you'll risk four times what you intended.
-
-**Can I run two strategies on the same ticker?**
-No. Two charts on one symbol will both try to steer a single position at your broker and fight over
-its protective stop. One ticker, one chart, one alert.
+**What markets does it work on?**
+Stocks, ETFs, crypto and forex. It adapts to how each instrument behaves. Automation is built and
+tested on US stocks and ETFs.
 
 ---
 
-## Understanding the dashboard
+## Automation
 
-**Why is Est. Annual Rtn "estimated"?**
-It annualises the result of a limited backtest window. It is not a forecast and it is not a promise
-— it is what this configuration would have produced over the bars TradingView loaded, scaled to a
-year. Treat it as a comparison tool between styles and tickers, not as an expected return.
+**Do I need to write code?**
+No. Choose **TradersPost** as your Broker Platform. It connects TradingView to brokers such as
+Alpaca and Tradier. See [TRADERSPOST.md](TRADERSPOST.md).
 
-**What is Stock Fit?**
-A grade for how well this ticker suits the engine, from A to F. It is computed live on whatever
-symbol you're looking at, so it works on any ticker rather than only a fixed list.
+**What is the self-hosted route?**
+Your own receiver, running in your Cloudflare account, manages each trade at Alpaca. It moves the
+broker stop up with the trailing stop, checks every 15 minutes that each position has a stop, and
+supports Add to Winning Trades and extended hours. Setup takes one command-line session. See
+[SELF-HOSTED.md](SELF-HOSTED.md).
 
-**What is Bot Score?**
-An overall S/A/B/C/D grade combining return, risk and consistency for the current ticker and
-settings. It is a summary of the dashboard, not an extra measurement.
+**Which route should I pick?**
+TradersPost if you want the fastest setup or a broker other than Alpaca. The self-hosted receiver
+if you use Alpaca and want the broker stop to follow the trailing stop.
 
-**My ticker shows a D Tier. Is the bot broken?**
-No — it's telling you this ticker and style don't suit each other. Not every ticker works. Try
-another Trading Style first, then another ticker. See TROUBLESHOOTING.md.
+**Why does the bot start on Alerts Only?**
+So that nothing trades until you choose it. Watch it on a chart, run it on paper, then connect a
+broker on purpose.
 
-**Why do the numbers change day to day?**
-TradingView loads a limited number of historical bars and that window moves forward. Old trades fall
-off the back as new ones arrive, so every statistic drifts slightly. This is normal and affects every
-TradingView indicator that reports statistics.
+**How long should I paper trade?**
+At least two weeks. [GOING-LIVE.md](GOING-LIVE.md) has the checklist.
+
+**Can I run several tickers?**
+Yes. Use one chart and one alert for each ticker. Turn on **Share of Account** to divide one
+account between them. See [GOING-LIVE.md](GOING-LIVE.md#4-set-the-money-each-chart-may-use).
+
+**Can I run two charts on the same ticker?**
+No. Both would steer the same position at your broker.
 
 ---
 
-## Risk and expectations
-
-**Will this beat buy-and-hold?**
-On many tickers over long periods, no — and the honest answer matters more than the flattering one.
-Market Axiom is built for managed risk, defined stops and disciplined exits: the parts most retail
-traders struggle to do consistently by hand. It is not a market-beating machine and does not claim
-to be.
-
-**How bad do the losing streaks get?**
-Streaks of eight to fourteen consecutive losing trades have occurred during testing on tickers that
-were profitable overall. **This is the single most important thing to understand before you connect
-real money.** A run of losses is a normal feature of a trend-following system, not a sign it has
-stopped working — but you have to be able to sit through one without intervening.
-
-Before you go live, work out what fourteen consecutive losses at your Risk Per Trade would do to your
-account. If that number would make you quit, lower your Risk Per Trade until it wouldn't.
-
-**What Risk Per Trade should I use?**
-1% is the default and a sensible starting point. Higher is more aggressive in both directions. The
-test above is the real answer: pick the number whose worst-case run you could actually live through.
+## Money and risk
 
 **How much money do I need?**
-Minimum $500, because the bot only buys whole shares — a balance too small to afford one share skips
-the trade rather than placing it. On expensive tickers the practical minimum is much higher: at a
-$900 share price, one share is a large fraction of a small account, and sizing becomes coarse.
+At least $500 per chart. On stocks and ETFs the bot buys whole shares, so a chart needs enough money
+for at least one share. On high-priced stocks, more money gives finer sizing.
 
-**Does it short?**
-Yes, if you set Trade Direction to `Short Only` or `Long & Short`, and if your broker and platform
-both allow short selling. Long Only is the default and the most thoroughly tested mode.
+**How does it size trades?**
+Two ways, under **How to Size Trades**:
 
-**What happens overnight and at weekends?**
-Swing and Position styles hold overnight by design. Day Trading flattens before the close. Nothing
-fires when the market is closed, and stops resting at your broker do not trigger outside regular
-hours unless your broker explicitly supports that.
+- **Same % Every Trade** (default): each trade starts from the chart's full budget. Weaker setups
+  get smaller trades, down to a quarter of the budget.
+- **Smart Sizing:** each trade risks a set percent of the budget, chosen with **Risk Per Trade**.
+  Setup quality scales it from 0.25× to 2×.
 
-**What happens if my internet drops?**
-Nothing changes. Alerts run on TradingView's servers and orders are placed by your broker platform.
-Your computer is not in the path once an alert exists.
+**What does Risk Per Trade do?**
+It sets the base risk per trade when **How to Size Trades** is **Smart Sizing**. On the PRO default,
+Same % Every Trade, it is not used. LITE always uses Smart Sizing, so there it always applies.
+
+**What is Share of Account?**
+With it on, the bot sends your broker a percent of the account, and the broker works out the shares
+from the money that is really there. Sizing then follows your balance up and down. It is the
+recommended setting for automation. See [GOING-LIVE.md](GOING-LIVE.md#4-set-the-money-each-chart-may-use).
+
+**How bad do the losing streaks get?**
+Streaks of 8 to 14 losing trades in a row have happened in testing, on tickers that were profitable
+overall. Losing streaks are normal for a trend-following system. Before you fund an account, check
+the Worst Loss Streak and Max Drawdown for your ticker. [GOING-LIVE.md](GOING-LIVE.md#3-know-your-worst-case-before-you-fund)
+shows how.
+
+**Will it beat buy-and-hold?**
+Not on every ticker or in every period. Market Axiom is built for managed risk: rules-based entries,
+a stop on every trade and disciplined exits. Those are the parts most traders find hardest to do by
+hand.
+
+**Does it trade short?**
+Yes, with **Trade Direction** set to `Short Only` or `Long & Short`, if your broker allows short
+selling. **Long Only** is the default and the most tested mode.
+
+**What happens overnight?**
+The Swing and Position styles hold overnight. Day Trading closes its trade before the market close.
+When automated, the protective stop rests at your broker overnight.
+
+**What is Auto Stop-Loss for Bad Days?**
+A daily brake. If the day's loss, including an open trade, passes a limit set from the ticker's own
+volatility, the bot closes the position and takes no new trades until the next session.
+
+---
+
+## The dashboard
+
+**Why is Est. Annual Rtn an estimate?**
+It scales the backtest result to one year. Use it to compare styles and tickers, not as a forecast.
+
+**What are Stock Fit and Bot Score?**
+**Bot Score** (S to D) grades how the bot has actually done on this ticker: mostly yearly return,
+then how much it beats buying and holding, its profit-to-loss ratio and its worst dip. It gives a
+high grade only when the evidence supports it. **Stock Fit** (A to F) shows how busy and lively the
+stock itself is. It is not a forecast; judge results by Bot Score.
+
+**Why do the numbers change from day to day?**
+TradingView loads a limited window of history, and it moves forward each day. Old trades drop off as
+new ones arrive.
 
 ---
 
 ## Alerts
 
-**Why do I have to delete and recreate an alert to change a setting?**
-Because TradingView freezes a copy of the script, its settings and the chart's context at the moment
-you create the alert. Nothing you change afterwards reaches it. This is how TradingView works for
-every indicator, not something Market Axiom chose.
+**Why must I recreate an alert to change a setting?**
+TradingView saves a frozen copy of the script, its settings and the chart when you create an alert.
+Later changes do not reach it. This is true for every TradingView indicator.
 
 **How often should I recreate my alerts?**
-Every two to three weeks, and **only while you are flat on that ticker.** Your Account Balance is
-frozen into the alert, so it drifts as your account grows or shrinks; recreating re-aligns it. The
-bot also flags this for you once it is overdue.
-
-**Never recreate an alert while a trade is open** — close the position at your broker first.
+When you change a setting, when a new version is published, before the alert's expiration date,
+and every two to three weeks if Share of Account is off. Always while flat on that ticker.
 
 **Can I edit the alert's message?**
-There is nothing useful to edit. For the `Any alert() function call` condition the Message row only
-sets the alert's **name**, which never leaves TradingView. The actual payload comes from the script.
-
-**Why did my alert log show a delivery failure but the trade happened anyway?**
-TradingView allows a webhook 3 seconds to respond and logs a failure if it takes longer. The
-instruction usually arrived and executed regardless. See TROUBLESHOOTING.md for which failures are
-real and which aren't.
+There is no need. For `Any alert() function call`, the Message box only names the alert. The script
+writes the message that is sent.
 
 ---
 
-## LITE vs the full version
+## LITE and PRO
 
 **What does LITE include?**
-The same signal engine: buy and sell markers with entry price and stop loss, the trailing stop line,
-exit reasons, the trend cloud and sub-panes, and the live Stock Fit grade.
+The same signal engine: buy and sell signals, exit reasons, the trend cloud, the price numbers on
+the dashboard and the live Stock Fit grade. You can also get alerts for each signal.
 
-**What is locked in LITE?**
-All automation — LITE cannot send an order to any broker under any configuration. Also the
-performance metrics (Profit Factor, Est. Annual Rtn, Max Drawdown, Bot Score and the full Strategy
-Report), the fixed target-and-stop exit, Smart Sizing, the daily-loss circuit breaker, the
-before-the-close flatten, pyramiding, and dashboard size. Locked controls show a 🔒.
+LITE always sizes with Smart Sizing and Risk Per Trade, and always keeps Auto Stop-Loss for Bad
+Days and the Day Trading close on.
 
-**Are the signals the same in LITE?**
-Yes. LITE runs the same engine — it shows you less about the outcome and it cannot act on the
-signals for you.
+**What does PRO add?**
+The stop line, prices and share counts on the trade labels and in alerts, the performance numbers
+(Profit Factor, Avg Trade, Max Drawdown, Reward/Risk, Signals / Day, Est. Annual Rtn, Bot Score),
+the full Strategy Report, all automation, Set Target & Stop, the choice of sizing method, Share of
+Account, Add to Winning Trades, the option to turn off Auto Stop-Loss for Bad Days or the Day
+Trading close, and dashboard sizes.
+
+**Are LITE's signals the same as PRO's?**
+Yes. LITE runs the same engine. It shows less about each trade and cannot send orders.
 
 ---
 
 ## Data and privacy
 
-**Does Market Axiom see my broker credentials?**
-No. The indicator sends a signal to the webhook address you configured. Your broker connection lives
-inside TradersPost or your own server, and the indicator never has access to it.
+**Does Market Axiom see my broker login?**
+No. The indicator sends signals to the address you put in your alert. Your broker connection lives
+in TradersPost or in your own receiver.
 
-**Is my webhook address safe?**
-Treat it like a credential — anyone who has it can send orders to your account. Never post it
-publicly. On TradersPost, set **Allowed IP addresses** to **TradingView**, which makes the address
-useless to anyone who obtains it.
+**Is my webhook address private?**
+Treat it like a password. On TradersPost, set **Allowed IP addresses** to **TradingView**. On the
+self-hosted route, the receiver accepts only messages that carry your secret key.
 
-**Does anything get sent anywhere if I use Alerts Only?**
-No. On `Alerts Only` the indicator sends nothing to any external service. Alerts are delivered by
-TradingView to you, in whatever form you chose when creating them.
+**Does anything leave TradingView on Alerts Only?**
+No. TradingView delivers the alerts to you, and nothing else is sent anywhere.
 
 ---
 
 ## Getting help
 
-Message me through my TradingView profile. If you're reporting a problem, TROUBLESHOOTING.md lists
-the five things to include that make it solvable in one reply instead of five.
+Message me on TradingView. [TROUBLESHOOTING.md](TROUBLESHOOTING.md#still-stuck) lists what to
+include.

@@ -1,170 +1,129 @@
 # Finding Settings That Suit Your Ticker
 
-The dashboard is a tuning instrument, not a scoreboard. This page is how to use it.
-
-**Read this first, because it governs everything below.**
+The dashboard is a tuning tool, not a scoreboard. This page shows how to use it well.
 
 ---
 
-## What you are doing, and what you are not
+## The question you are asking
 
-**You are asking: is this ticker and this style a viable pairing at all?**
+**Is this ticker and this style a good pairing?** The dashboard answers that in about ten minutes.
 
-That is a yes-or-no question with an honest answer, and the dashboard can give it to you in about
-ten minutes.
+The goal is not the highest Est. Annual Rtn you can find. If you change settings until that number
+peaks, you find the settings that best fit the exact bars TradingView loaded. That is called
+over-fitting. It makes a beautiful backtest and a disappointing account.
 
-**You are not trying to maximise Est. Annual Rtn.**
-
-If you keep changing settings until the number peaks, you have not found a better configuration —
-you have found the settings that best fit the specific bars TradingView happened to load. That is
-called over-fitting, and it produces a beautiful backtest and a disappointing live account. It is the
-single most common way traders lose money with tools like this one.
-
-**The tell:** a configuration that only works at one exact value, and falls apart if you nudge it,
-is fitted to noise. A configuration that works across a range of nearby values has probably found
+**The test:** a good setting still works when you move it a little. If Stop Width 1.2 looks great
+and 1.1 and 1.3 both look poor, 1.2 is luck. If 1.1, 1.2 and 1.3 all look good, you have found
 something real.
-
-Test that deliberately. If Stop Width 1.2 looks great and 1.1 and 1.3 both look terrible, don't
-trade 1.2 — you found an artefact.
 
 ---
 
 ## Before you change anything
 
-**Start from the defaults.** They are the configuration the product was measured on. Anything you
-change is a departure from tested ground, and you should know why you're making it.
-
-**Use a 15-minute chart.** Every style produces its most consistent results there. Tuning on another
-timeframe means tuning outside the tested configuration and the dashboard will flag it.
-
-**Get a real sample.** Below 20 trades, the numbers are noise and you are reading tea leaves. Check
-the trade count before you read anything else.
-
-**Change one thing at a time.** Two changes at once and you learn nothing about either.
+- **Start from the defaults.** They are the settings the product was measured on.
+- **Use a 15-minute chart.** The defaults were validated on that timeframe.
+- **Check the trade count first.** Below 20 trades, the other numbers are noise.
+- **Change one thing at a time.** With two changes at once, you learn nothing about either.
+- **Use the route you will trade.** Broker Platform changes the numbers, because each route follows
+  its own rules. Tune with it already set.
 
 ---
 
 ## The order to try things
 
-Work down this list. Stop as soon as you have something viable — earlier changes matter far more
-than later ones.
+Work down this list and stop when you have a good pairing. The first items matter most.
 
-### 1. Trading Style — the biggest lever by far
-
-This is the setting that moves the dashboard most, and it's the first thing to try when a ticker
-looks bad.
+### 1. Trading Style — the biggest lever
 
 ```
 Day Trading → Fast Swing → Swing → Slow Swing → Fast Position → Position → Slow Position
 ```
 
-Start at **Swing** and walk outward in both directions. Watch how Est. Annual Rtn, Profit Factor and
-Signals/Day respond.
+Start at **Swing** and step outward in both directions. Watch Est. Annual Rtn, Profit Factor and
+Signals / Day.
 
-**What you're looking for:** a *neighbourhood* that works, not a single winning value. If Swing and
-Slow Swing are both decent, that's a real signal about the ticker's rhythm. If only Fast Swing works
-and everything either side is poor, be suspicious.
+Look for a **range** of styles that works, not one winner. If Swing and Slow Swing both do well,
+that tells you something real about the ticker's rhythm. Faster styles winning means the ticker
+moves in short bursts. Slower styles winning means it trends and needs room.
 
-**Reading it:** if faster styles do better, the ticker moves in short bursts. If slower ones do, it
-trends and needs room. If nothing works at any speed, the ticker doesn't suit the engine — move on.
+### 2. Bot Score
 
-### 2. Check Stock Fit before spending more time
+**Bot Score** grades how the bot has actually done on this ticker, from S to D. It only gives a
+high grade when there is enough evidence, and it needs 30 days of history before it shows a grade.
 
-**Stock Fit** grades how well the ticker's measured behaviour suits the engine, A to F.
+- **S, A or B:** worth more of your time.
+- **D** on every style: that is your answer. Pick a different ticker.
+- **C** often means there is not enough evidence yet, however good the numbers look.
 
-A **D or an F is your answer.** No amount of setting-changing rescues a ticker the engine can't read,
-and time spent trying is time spent fitting noise. Pick a different ticker.
-
-An **A or B** with poor numbers means the pairing is worth more attention — keep going.
+**Stock Fit** (A to F) is not a performance grade. It shows how busy and lively the stock is. Many
+A-grade stocks still do poorly with the bot, so judge results by Bot Score.
 
 ### 3. How to Close Trades
 
-Two exits, and they suit different markets:
+- **Follow the Trend** (trailing stop) suits tickers that trend. Winners run, and each trade gives
+  back part of its peak.
+- **Set Target & Stop** suits tickers that chop. It takes profit at a fixed target, four times the
+  stop distance.
 
-- **Follow the Trend** (trailing stop) — better when the ticker trends. Lets winners run, gives back
-  some of the peak on every trade.
-- **Set Target & Stop** (bracket) — better when the ticker chops. Takes profit at a level instead of
-  waiting for a reversal.
-
-If your best Trading Style is one of the slower ones, try Follow the Trend. If it's one of the
-faster ones, try both.
+With a slower style, start with Follow the Trend. With a faster style, try both.
 
 ### 4. Signal Quality
 
-**Aggressive** takes more trades. **Moderate** takes fewer and adds a longer-term trend filter to
-trend-following entries.
+**Aggressive** takes more trades. **Moderate** takes fewer and only takes trend trades in the
+direction of the longer-term trend.
 
-If your trade count is healthy but Profit Factor is weak, Moderate may be filtering out the marginal
-setups that are costing you. If your trade count is already thin, Moderate will make the sample too
-small to read — leave it on Aggressive.
+If the trade count is healthy but Profit Factor is weak, try Moderate. If the trade count is
+already low, stay on Aggressive. On the slower styles, Moderate also needs more chart history before
+it can start.
 
-### 5. Stop Width — smallest lever, most over-fitted
+### 5. Stop Width — the smallest lever
 
-Wider stops mean fewer stop-outs and bigger individual losses. Tighter means the reverse.
+Stop Width scales the stop distance, from 0.9 to 2.5 (default 1.0). It scales the entry stop, and
+the trailing stop on trades taken by the Trend Follow engine. Wider means fewer stop-outs and larger single losses.
+Tighter means the reverse.
 
-**This is where over-fitting happens most**, because it's a continuous number and there is always
-some value that flatters the backtest. Move it in meaningful steps, not fine increments, and only
-if you can articulate why — "this ticker's normal noise keeps stopping me out" is a reason,
-"1.3 scored higher than 1.2" is not.
+Because it is a fine dial, this is where over-fitting happens most. Move it in steps of 0.1 or more,
+and only with a reason, for example "normal noise on this ticker keeps stopping me out".
 
 ---
 
-## What good actually looks like
+## What a good pairing looks like
 
-Not "the highest number you found." A configuration worth trading:
-
-- **Est. Annual Rtn positive** — and positive at nearby settings too, not just this one
-- **Profit Factor above 1.5**
-- **Max Drawdown you could sit through** without turning it off
+- **Est. Annual Rtn** positive, and positive at nearby settings too
+- **Profit Factor** above 1.5
+- **Max Drawdown** you could sit through
 - **At least 20 trades**, ideally many more
-- **Signals / Day that matches your life** — a strategy firing six times a day is not viable if you
-  check your phone twice
-- **Stock Fit of A or B**
+- **Signals / Day** that fits your life
+- **Bot Score** of B or better
 
-The full pre-flight is in **[GOING-LIVE.md](GOING-LIVE.md)**.
-
----
-
-## Warning signs you've over-fitted
-
-Stop and reset to defaults if you notice any of these:
-
-- **The result collapses when you nudge a setting.** Real edges are robust to small changes.
-- **You've changed four or five things.** Each one narrows the configuration onto this specific
-  history. Go back to defaults and change one.
-- **You're on an unusual Trading Style with a specific Stop Width on a ticker with mediocre Stock
-  Fit.** That combination is a backtest artefact almost every time.
-- **The trade count fell as the return rose.** You have probably excluded losing trades rather than
-  improved anything. Twelve trades with a spectacular return tells you nothing.
-- **You can't say why the change should work.** If there's no story about the ticker's behaviour
-  behind it, it's a coincidence.
+Then follow [GOING-LIVE.md](GOING-LIVE.md).
 
 ---
 
-## Things the dashboard cannot tell you
+## Signs of over-fitting
 
-**Whether the future resembles the past.** Every number is computed on bars that already happened.
+Go back to the defaults if you see any of these:
 
-**Whether you'll hold on.** A −25% max drawdown is a number on screen and an entirely different
-experience in your account. Be honest about which one you're evaluating.
+- **The result falls apart when you nudge a setting.**
+- **You have changed four or five things.**
+- **The trade count fell as the return rose.** You removed losing trades, not improved the system.
+- **You cannot say why the change should work.**
 
-**Whether the sample is representative.** TradingView loads a limited window. If that window was all
-bull market, you are looking at how the strategy does in a bull market.
+---
 
-**Anything about a route you aren't running.** Broker Platform changes the numbers, because the
-TradersPost route holds outside-hours exits until the next regular session and that changes the trade
-set. Tune on the route you'll actually use.
+## What the dashboard cannot tell you
+
+- **Whether the future will look like the past.** Every number comes from bars that already
+  happened.
+- **Whether the sample is typical.** If the loaded history was all one kind of market, the numbers
+  describe that market.
+- **How a drawdown will feel.** −25% on screen and −25% in your account are different experiences.
 
 ---
 
 ## When to stop
 
-**Stop when you have a viable configuration, not when you have the best one you can find.**
-
-The difference between a good configuration and the theoretically optimal one is mostly noise. The
-difference between trading a robust one and abandoning an over-fitted one three weeks in is your
-entire account.
-
-If you've walked the Trading Styles, checked Stock Fit, tried both exits, and nothing clears the
-bar — **that ticker isn't for this engine.** That is a real, useful answer, and it took you ten
-minutes instead of three months. Try another symbol.
+Stop when you have a good pairing, not the best one you can find. The gap between good and
+"optimal" is mostly noise. If you have tried the styles, checked Bot Score and tried both exits,
+and nothing passes, that ticker is not a fit for this engine. That is a useful answer. Try another
+ticker.

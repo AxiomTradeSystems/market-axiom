@@ -1,220 +1,147 @@
 # Creating Alerts
 
-Alerts are how Market Axiom reaches the outside world — to your phone, or to your broker. They are
-also where almost every setup problem happens, and nearly all of those problems come from one
-misunderstanding.
-
-Read the first section before you touch anything.
+Alerts are how Market Axiom reaches you or your broker. TradingView runs them on its own servers,
+so they keep working when your browser and computer are off.
 
 ---
 
-## The one thing to understand first
+## The one idea to understand first
 
-**A TradingView alert is a frozen copy of the script, its settings, and the chart it was created on,
-at the exact moment you clicked Create.**
+**An alert is a frozen copy.** When you click Create, TradingView saves a copy of the script, its
+settings and the chart (symbol, timeframe and session). The alert runs from that copy.
 
-That means:
+- Changing a setting on the chart does not reach the alert.
+- A new version of the indicator does not reach the alert.
+- To change an alert, delete it and create a new one, **while you are flat on that ticker**.
 
-- Changing a setting on your chart does **not** reach a running alert.
-- Updating to a newer version of the indicator does **not** reach a running alert.
-- Changing the chart's session — regular hours to extended hours — does **not** reach it either.
-
-**The only way to change an alert is to delete it and create a new one.**
-
-This is how TradingView works for every indicator. It isn't something Market Axiom chose, and there
-is no setting that changes it.
-
-**The consequence that catches people:** the chart has no way to know an alert exists, what settings
-it froze, or whether it's still running. So the chart cannot warn you when an alert is
-misconfigured — you have to get it right at creation time.
+This is how TradingView works for every indicator. Once you know it, alerts are simple: set
+everything first, then create the alert.
 
 ---
 
-## Order of operations
-
-**Configure the indicator completely, then create the alert. Never the other way round.**
+## Before you open the alert dialog
 
 1. Open the indicator settings and set everything the way you want it.
-2. Set **Broker Platform** — this is the one that decides whether the bot can trade at all.
-3. Close settings with **OK**.
-4. Check the footer at the bottom of the indicator.
-5. *Only then* create the alert.
-
-### The footer check
-
-The status line at the bottom of the indicator reads something like:
+2. For automation, set **Broker Platform** first. It decides what the alert sends.
+3. Click **OK**.
+4. Check the status line at the bottom of the indicator:
 
 ```
-@AxiomTradeSystems v1.0.91 (build 260826D) · armed
+@AxiomTradeSystems v1.0.114 (build 261008F) · armed
 ```
 
-**`armed` appears only when the bot is configured to send orders.** If you are setting up automation
-and `armed` is missing, stop — the alert you're about to create would be unable to place a trade,
-permanently.
-
-If you only want notifications and no broker orders, `armed` should be absent. That's correct.
+`armed` shows when the bot is set to send orders to a broker. For automation it must be there.
+For notifications only, it should not be.
 
 ---
 
 ## Alerts for manual trading
 
-Use these when you want to be told what to do and you'll place the orders yourself. Leave Broker
-Platform on **Alerts Only**.
+Leave **Broker Platform** on `Alerts Only (no broker orders)`. You get a message for each signal and you place the
+orders yourself.
 
-1. Click the **Alert** button (🔔) in the TradingView toolbar
-2. **Condition** — change `Price` to **`Axiom`**
-3. In the second dropdown, choose **`Any alert() function call`**
-4. **Interval** — leave on `Same as chart`
-5. **Expiration** — set to **Open-ended** if your TradingView plan offers it, so the alert doesn't
-   stop on its own
-6. **Message** — leave it. See below.
-7. **Notifications** — pick what you want: app notification, email, sound, or any combination
-8. Click **Create**
+1. Click **Alert** in the top toolbar.
+2. **Condition:** choose **Axiom** (the indicator), then **`Any alert() function call`**.
+3. **Expiration:** choose **Open-ended** if your plan offers it.
+4. **Notifications:** choose any mix of app, email and sound.
+5. Click **Create**.
 
-You'll receive messages like:
+Messages look like this:
 
 ```
-🟢 BUY TSLA @ $185.42 | Stop: $182.10 | Qty: 54
-🛡️ Stopped TSLA @ $183.55 | P/L: -1.01%
+🟢 BUY TSLA | Qty: 54 @ $385.42 | Stop: $372.10 | Risk: $719.28
+🛡️ Stopped TSLA | Sold 54 @ $380.55 | P/L: -1.26% (-$262.98)
 ```
+
+LITE alerts name the signal and the ticker, and show 🔒 PRO in place of the prices.
 
 ---
 
 ## Alerts for automated trading
 
-Same dialog, two differences: Broker Platform must be set first, and you turn on the Webhook
-notification.
+Set up your route first: [TRADERSPOST.md](TRADERSPOST.md) or [SELF-HOSTED.md](SELF-HOSTED.md).
+Then, with `armed` showing in the status line:
 
-**Before you open the alert dialog:**
+1. Click **Alert** in the top toolbar.
+2. **Condition:** choose **Axiom** (the indicator), then **`Any alert() function call`**.
+3. **Expiration:** choose **Open-ended** if your plan offers it.
+4. **Notifications:** turn on **Webhook URL** and paste your TradersPost strategy URL or your
+   receiver's address.
+5. Click **Create**.
 
-1. Set **Broker Platform** to `TradersPost` or `Standard (Custom JSON)`
-2. If your platform needs one, enter your **Webhook Secret Key**
-3. Click **OK**
-4. **Confirm the footer shows `armed`**
-
-**Then:**
-
-5. Click the **Alert** button (🔔)
-6. **Condition** — `Axiom`, then **`Any alert() function call`**
-7. **Interval** — `Same as chart`
-8. **Expiration** — **Open-ended** if available
-9. **Notifications** — turn **Webhook** ON and paste your platform's webhook address into the URL box
-10. Click **Create**
-
-Repeat for every ticker you want to automate. **One chart, one alert, one ticker.**
+Do this once for each ticker: **one chart, one alert, one ticker.**
 
 ---
 
 ## The dialog, field by field
 
-**Condition.** Must be the indicator (`Axiom`) and **`Any alert() function call`**. Any other
-condition sends the wrong thing or nothing at all.
+**Condition.** Always **Axiom** (the indicator) and **`Any alert() function call`**. The script decides what
+each message says and when it is sent.
 
-**Interval.** `Same as chart`. The indicator is designed around the chart's timeframe; overriding it
-here decouples the alert from what you tested.
+**Interval.** Leave it on `Same as chart`.
 
-**Expiration.** Set **Open-ended** if your plan offers it. Otherwise the alert stops on its own at
-the expiration date and your bot goes quiet with no error anywhere — it simply stops appearing in the
-log. If you can't set open-ended, note the date somewhere you'll see it.
+**Expiration.** On plans with open-ended alerts, choose **Open-ended**. On other plans an alert
+stops on its own after at most two months. Put the expiry date in your calendar and recreate the
+alert, while flat, before that date.
 
-**Message.** **Leave this alone.** For the `Any alert() function call` condition, the Message row
-only sets the alert's **name** — the text you'd see in the Alerts Manager. It never leaves
-TradingView and it has no effect on what gets sent. The actual payload comes from the script.
+**Message.** Leave it as it is. For this condition, the Message box only names the alert in your
+alert list. The script writes the message that is sent.
 
-You can rename it if you find it useful for organising a long list. It changes nothing functional.
-
-**Notifications.** For manual trading, whatever suits you. For automation, **Webhook ON** with your
-platform's address in the URL box.
-
-⚠️ **Never put your Webhook Secret Key into the alert.** It belongs in the indicator's settings,
-where the script includes it in the payload itself.
+**Webhook URL.** Your TradersPost strategy URL or your receiver's address. Your Webhook Secret Key
+never goes here. On the self-hosted route the script puts it inside the message.
 
 ---
 
-## Verifying it worked
+## Check that it works
 
-**1. Check the Alerts Manager.** Open the 🔔 panel on the right. Your alert should show a green
-**Active** status. Anything else means it isn't firing:
+1. **Alerts list.** Open the alerts panel on the right. Your alert should show a green **Active**
+   status.
 
-| Status | Meaning |
-|---|---|
-| `Active` (green) | running normally |
-| `Stopped — Expired` (red) | expiration passed — recreate it |
-| `Stopped manually` (grey) | paused — restart or recreate |
-| `Stopped — Triggered` (orange) | created as one-time — recreate without "Only Once" |
+   | Status | Meaning |
+   |---|---|
+   | Active (green) | Running |
+   | Stopped — Expired (red) | The expiration date passed. Recreate it. |
+   | Stopped manually (gray) | Paused. Restart it or recreate it. |
+   | Stopped — Triggered (orange) | It was set to fire once. Recreate it. |
 
-**2. Wait for a real signal.** Alerts fire on bar close, so nothing happens until a candle finishes
-and a condition is met. On a 15-minute chart that can be a while, and on a quiet ticker it can be
-days. Silence on the first afternoon is not evidence of a problem.
-
-**3. Check the Log tab** once something has fired. Every triggered alert appears there with its
-delivery status.
-
-**4. For automation, check your broker.** Delivery to your platform is not the same as an order at
-your broker. Look at the actual position and the actual resting stop.
-
----
-
-## One alert per ticker
-
-Never run two alerts on the same symbol, and never put two charts on one ticker.
-
-Both would try to steer a single position at your broker and fight over its protective stop. The
-result is unpredictable and can leave a position unprotected.
-
-Several tickers is fine — a separate chart and a separate alert for each. Remember to **split your
-Account Balance** between them, or every chart will size as though it owns the whole account.
-
----
-
-## When to recreate an alert
-
-**Every two to three weeks**, while you're **flat** on that ticker. Your Account Balance is frozen
-into the alert at creation, so it drifts as your account grows or shrinks; recreating re-aligns it.
-The bot also flags this once it's overdue.
-
-**Whenever you change any setting** you want the bot to actually use. The running alert is still
-using the settings it froze.
-
-**After updating the indicator**, if you want the new build's behaviour on that lane.
-
-## When NOT to recreate an alert
-
-⚠️ **Never delete an alert while that ticker holds an open position at your broker.**
-
-Close the position at your broker first, confirm you're flat, and only then delete and recreate.
-Deleting an alert mid-trade can leave that position with nothing managing it — no trailing stop
-updates, no exit signal, nothing.
-
-Note also that **deleting an alert deletes its log history.** If you're investigating something, save
-what you need before you delete.
+2. **Wait for a signal.** The bot acts at bar close when a condition is met. On a 15-minute chart
+   the first signal can take hours, or days on a quiet ticker.
+3. **Check the alert log** after the first signal. Each fired alert is listed with its delivery
+   result.
+4. **For automation, check your broker.** You should see the filled entry and a stop resting under
+   it.
 
 ---
 
 ## Reading the alert log
 
-The Log tab shows every alert that fired and what happened to the delivery.
+**Webhook successfully delivered** — your platform received it. Your broker shows what happened
+next.
 
-**`Webhook successfully delivered`** — your platform accepted it. This is not the same as an order
-existing at your broker; check there for that.
+**Request took too long and timed out** — TradingView waits 3 seconds for a reply. The order very
+often arrived and went through anyway, a few seconds later. Check your broker.
 
-**`Webhook delivery failed — request took too long and timed out`** — TradingView allows 3 seconds
-for a response and gave up waiting. **This usually does not mean the instruction was lost.** It very
-often arrived and executed anyway, seconds later. Check your broker before assuming anything.
+**Couldn't find this domain** — the message did not reach your platform. Check the webhook address,
+then check your broker.
 
-**`Webhook delivery failed — couldn't find this domain`** — this one is real. The request never
-reached your platform. If it was an entry or an exit, check your broker immediately.
+Deleting an alert also deletes its log. Save what you need first.
 
 ---
 
-## Common mistakes, in the order people make them
+## When to recreate an alert
 
-1. **Creating the alert before setting Broker Platform.** The alert freezes on `Alerts Only` and can
-   never trade. No error, no warning, nothing in the log to explain it.
-2. **Changing a setting and expecting the alert to follow.** It won't. Delete and recreate.
-3. **Choosing the wrong condition.** It must be `Any alert() function call`.
-4. **Editing the alert message box** expecting it to matter. It only sets the name.
-5. **Two charts on one ticker.**
-6. **Not splitting Account Balance** across multiple charts.
-7. **Deleting an alert while a position is open.**
-8. **Assuming a delivery failure means a lost trade.** Check the broker first.
+Always while flat on that ticker:
+
+- **After you change a setting** that you want the alert to use.
+- **After a new version is published**, to run the new version.
+- **Every two to three weeks**, if **Share of Account** is off. Type your current balance into
+  Account Balance first, so sizing keeps up with your account.
+- **Before its expiration date**, on plans without open-ended alerts.
+
+---
+
+## How often alerts fire
+
+TradingView stops any alert that fires more than 15 times in 3 minutes. Market Axiom sends far fewer
+messages than that on its supported timeframes. If you run **Quick Exits** on a 1-minute or seconds
+chart, check the alerts list now and then for a stopped alert.

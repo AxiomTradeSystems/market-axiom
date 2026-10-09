@@ -1,148 +1,138 @@
-# Before You Trade Real Money
+# Going Live
 
-Read this once, in full, at the point where you're about to connect a live account. Everything here
-exists because skipping it is expensive.
-
-Work top to bottom. Don't skip the arithmetic in step 3 — it's the step that decides whether you'll
-still be running this in six months.
+The path from a paper (practice) account to real money. Work through it once, in order.
 
 ---
 
-## 1. Run on paper for at least two weeks
+## 1. Run on paper for two weeks
 
-Both TradersPost and most brokers offer a free paper account. Use one.
+TradersPost, Alpaca and most brokers offer a free paper account. Run your exact setup there for at
+least two weeks. That is long enough to see a trend, a choppy stretch and a gap.
 
-Two weeks is a minimum, not a target. It is roughly what it takes to see the bot behave across more
-than one market mood — a trend, a chop, a gap, a bad day. One good week teaches you nothing you can
-rely on.
+Each day, check that:
 
-**What you're watching for:**
+- every entry on the chart has a filled order at the broker,
+- every open position has a protective stop resting at the broker,
+- every exit left the broker flat, with no orders left behind,
+- the chart and the broker agree on what you hold.
 
-- Orders arriving at the broker when the chart says they should
-- Stops appearing at the broker alongside entries
-- Exits closing positions cleanly, with nothing left resting afterwards
-- The chart and the broker agreeing about what you hold, every time you look
-
-**If any of those are inconsistent on paper, they will be inconsistent with real money.** Fix it
-before you fund anything.
+When all four hold for two weeks, the setup is ready.
 
 ---
 
-## 2. Check the four numbers on your ticker and style
+## 2. Check the numbers for your ticker
 
-On the exact ticker, timeframe and settings you intend to run:
+On the exact ticker, timeframe and settings you will run:
 
 - [ ] **Est. Annual Rtn** is positive
 - [ ] **Profit Factor** is above 1.5
-- [ ] **Max Drawdown** is a number you could sit through without intervening
-- [ ] At least **20 trades** in the backtest
+- [ ] **Max Drawdown** is a drop you could sit through
+- [ ] The backtest has at least **20 trades**
 
-All four, or don't run it live on that pairing. Three out of four is not a pass — a great return over
-six trades is noise, and a profit factor of 1.8 next to a drawdown that would make you quit is a
-system you will abandon at the worst moment.
-
-These are historical results over a limited window. They are evidence, not a forecast.
+All four together make a pairing worth trading. These numbers come from the history TradingView
+loaded. They show how the setup behaved, not what it will do next.
 
 ---
 
-## 3. Do the losing-streak arithmetic
+## 3. Know your worst case before you fund
 
-**This is the step people skip, and it's the one that matters most.**
+Every rules-based system has losing streaks. Streaks of 8 to 14 losing trades in a row have
+happened in testing on tickers that were profitable overall. Decide now what you will sit through.
 
-Streaks of **eight to fourteen consecutive losing trades** have occurred in testing on tickers that
-were profitable overall. A run of losses is a normal feature of a trend-following system, not a sign
-that it has broken.
+**On the default sizing, `Same % Every Trade`**, the loss on a stopped trade depends on the
+position size and the stop distance. The Strategy Report shows what that meant on your ticker:
 
-**Work out what fourteen consecutive losses at your Risk Per Trade would do to your account.**
+- **Max Drawdown** — the deepest fall from a high point.
+- Hover the **Strategy Report** header for the **Worst Loss Streak** and the worst trade.
 
-| Risk Per Trade | Account after 14 consecutive losses |
+If those numbers are larger than you can accept, use a smaller Account Balance (or Share of
+Account) for this chart.
+
+**To set the loss per trade directly**, switch **How to Size Trades** to **Smart Sizing**. Then
+**Risk Per Trade** sets the base loss when a stop is hit. The bot scales it from 0.25× to 2× with
+setup quality. On the base value alone, 14 losses in a row leave:
+
+| Risk Per Trade | Account left after 14 losses |
 |---|---|
-| 0.5% | about 93% remaining |
-| 1% | about 87% remaining |
-| 2% | about 75% remaining |
-| 3% | about 65% remaining |
-| 5% | about 49% remaining |
+| 0.5% | about 93% |
+| 1% (default) | about 87% |
+| 2% | about 75% |
+| 3% | about 65% |
 
-**If that number would make you turn the bot off, lower your Risk Per Trade until it wouldn't.**
-
-The trader who quits during a normal drawdown loses more than the trader who sized smaller and sat
-through it. Pick the risk level whose worst case you can actually live with, then leave it alone.
+Pick the level whose worst case you could live through, then leave it alone.
 
 ---
 
-## 4. Set your Account Balance honestly
+## 4. Set the money each chart may use
 
-**One chart:** type in your real account balance.
+Two settings work together: **Account Balance** and **Share of Account**.
 
-**Several charts:** split it. Four charts on a $20,000 account means $5,000 typed into each.
+### Share of Account on (recommended for automation)
 
-Every chart sizes as though it is the only thing touching your account. Tell all four they have
-$20,000 and all four will trade full size, and you will risk four times what you intended — at the
-exact moment several tickers signal together, which is when correlated markets move.
+The bot sends your broker a percent of the account, and the broker turns it into shares from the
+money that is really there. Sizing follows your balance up and down on its own.
 
-**Never put two charts on the same ticker.** They will both try to steer one position at your broker
-and fight over its protective stop.
+- **Account Balance:** your **whole** account balance, the same on every chart.
+- **Share of Account:** this chart's part. One chart: `100`. Four charts: `25` each. Keep the total
+  at 100 or less. A total under 100 leaves room while other charts hold open trades.
 
----
+### Share of Account off (`0`, the default)
 
-## 5. Verify your broker platform settings
+The bot sends your broker a share count, sized from Account Balance.
 
-For **TradersPost**, check every one of these on the strategy and its subscription. Each has a
-specific silent failure mode:
+- **Account Balance:** the money **this chart** may use. Four charts on a $20,000 account: type
+  `5000` into each.
+- Every two to three weeks, while flat, type your current balance and recreate the alert.
 
-- [ ] **Auto submit** — ON, or trades wait for manual approval
-- [ ] **Allowed tickers** — includes your symbol
-- [ ] **Allowed IP addresses** — set to **TradingView**
-- [ ] **Short selling** — ON only if you trade shorts
-- [ ] **Cancel open orders on exit** — ON, or protective orders are left resting on a flat account
-- [ ] **Stop order time in force** — GTC, or your stop expires at the end of the day
-- [ ] **Failure notifications** — ON, or a rejected order is invisible to you
-- [ ] **Duplicate / repeated-signal protection** — ON
+### Either way
 
-**Assume these can revert.** Re-read them after any change to the strategy, and re-read them once
-more before you fund the account.
-
-`Allowed IP addresses` is the one people leave open. Your webhook address is a credential — anyone
-who obtains it can send orders to your account. Restricting the strategy to TradingView's servers is
-what makes a leaked address useless.
+- The minimum is $500. On stocks and ETFs the bot buys whole shares, so a chart that cannot afford
+  one share skips the trade.
+- **Capital Buffer** (default 0.25%) keeps a small part of each chart's money aside for fill
+  differences.
+- One ticker per chart. Two charts on one ticker would steer one position from two places.
 
 ---
 
-## 6. Create the alert in the right order
+## 5. Switch the route to your live account
 
-**Set Broker Platform BEFORE you create the alert.** An alert is a frozen copy of the script and its
-settings — one created while Broker Platform was on `Alerts Only` will send plain text forever and
-can never place a trade, and nothing on the chart can warn you.
+**TradersPost:** subscribe your live broker account to the strategy, and check every setting in
+the [strategy settings table](TRADERSPOST.md#3-set-the-strategy-settings) again on the live
+subscription.
 
-Before clicking Create, check the footer at the bottom of the indicator shows the word **`armed`**.
-If it doesn't, stop and fix the settings first.
-
-Full walkthrough: **[CREATING-ALERTS.md](CREATING-ALERTS.md)**
-
----
-
-## 7. Watch the first week actively
-
-Once real money is connected, check daily for the first week:
-
-- [ ] Every entry on the chart has a matching filled order at your broker
-- [ ] Every open position has a **protective stop resting** at the broker
-- [ ] Every exit on the chart left the broker **flat**, with no orders still resting
-- [ ] Nothing is holding a position the chart doesn't know about, or vice versa
-
-**The broker is the only authority.** If the chart and the broker ever disagree, the broker is right.
-Close the position at your broker manually, get flat, and only then recreate the alert.
+**Self-hosted receiver:** set `ALPACA_BASE_URL` to the live address, store your **live** Alpaca keys
+with `npx wrangler secret put`, deploy, and run the health check.
+[SELF-HOSTED.md](SELF-HOSTED.md#3-choose-paper-or-live) has the details.
 
 ---
 
-## What you're signing up for
+## 6. Create the live alerts
 
-Market Axiom manages risk and enforces exits. It does not predict markets and it does not beat
-buy-and-hold on most tickers over long periods.
+While flat on each ticker, delete the paper alert and create the live one.
+[CREATING-ALERTS.md](CREATING-ALERTS.md#alerts-for-automated-trading) has the steps. Check that the
+status line shows `armed` before you click Create.
 
-It will have losing streaks. It will exit trades that would have recovered. It will sit out moves you
-would have taken by hand. That is what a rules-based system does, and the discipline is the point —
-but you have to want that trade-off before you fund it, not discover it afterwards.
+---
 
-**Never trade with money you cannot afford to lose.** Nothing here is financial advice, and past
-results — backtested or live — do not guarantee anything about the future.
+## 7. Watch the first week
+
+Check once a day, the same four things as on paper:
+
+- [ ] Every entry has a filled order at your broker
+- [ ] Every open position has a protective stop resting at your broker
+- [ ] Every exit left your broker flat
+- [ ] The chart and your broker agree
+
+If they ever disagree, your broker is right. Close the position at the broker, then recreate the
+alert while flat.
+
+---
+
+## What to expect
+
+Market Axiom enters on rules, sizes every trade and always has an exit plan. It will have losing
+streaks, it will sometimes exit a trade that later recovers, and it will skip some moves. That
+discipline is the point: the rules run the same way on good days and bad ones.
+
+Trade only with money you can afford to lose. Nothing here is financial advice, and past results,
+backtested or live, do not guarantee future results.
