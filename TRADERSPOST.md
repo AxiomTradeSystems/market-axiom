@@ -42,6 +42,7 @@ subscription:
 | Cancel open orders on exit | **On** | No orders stay behind after a trade closes |
 | Stop order time in force | **GTC** | The protective stop stays in place overnight |
 | Failure notifications | **On** | You hear about any order the broker refuses |
+| Enable trade locking (Retry settings) | **On** | Two signals seconds apart cannot both act on the same position |
 
 ### 4. Set up the indicator
 
