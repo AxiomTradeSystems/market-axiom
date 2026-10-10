@@ -43,6 +43,7 @@ subscription:
 | Stop order time in force | **GTC** | The protective stop stays in place overnight |
 | Failure notifications | **On** | You hear about any order the broker refuses |
 | Enable trade locking (Retry settings) | **On** | Two signals seconds apart cannot both act on the same position |
+| Cancel open order wait time | **120 seconds** (the default) | The exit cancels your stop before it sells; a longer wait can delay it |
 
 ### 4. Set up the indicator
 
@@ -98,9 +99,15 @@ fills then, your broker shows the trade closed at once, and the chart records it
 **Add to Winning Trades** and **Trade Extended Hours** are not used on this route. The chart and
 the dashboard follow these route rules, so the numbers you see describe this route.
 
-**If TradingView restarts the alert** while a trade is open, the bot sends a protective exit to
-close the position. This route cannot pick up a trade in progress, so it closes it cleanly. The bot
-then waits for its next signal.
+**When the alert starts, and each time TradingView restarts it,** the bot sends one protective
+exit to TradersPost, whether a trade is open or not. This route cannot pick up a trade in progress,
+so it closes any position the bot may have lost track of. On New York stocks, funds and indexes the
+exit waits for regular market hours (Monday to Friday, 09:30 to 15:58 New York time). The bot then
+takes no new entry for 5 minutes, so your broker can finish the exit, and waits for its next signal.
+
+This exit closes every share of that ticker in the account and cancels all its open orders, also
+ones you placed by hand. Keep shares you trade by hand in a different account. On a flat account
+TradersPost shows the exit as a rejected signal. That is normal.
 
 ---
 
