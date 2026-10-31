@@ -20,9 +20,11 @@ performance dashboard. When you are ready, connect a broker and the same signals
 | Fix something that looks wrong | **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** |
 | Understand how it works | **[FAQ.md](FAQ.md)** |
 | Look up what a setting or label means | **[GLOSSARY.md](GLOSSARY.md)** |
+| Read the full help for a setting, or how to read the Strategy Report | **[SETTINGS.md](SETTINGS.md)** |
 
 Every setting also has its own help inside the indicator. Hover the ⓘ beside it. That help ships
-with each version, so it always matches the version you run.
+with each version, so it always matches the version you run. The long explanations are in
+[SETTINGS.md](SETTINGS.md).
 
 **Bookmark this page instead of saving a copy.** It is the one address that stays current.
 
